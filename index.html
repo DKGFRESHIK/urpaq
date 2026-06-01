@@ -1,0 +1,449 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --c1:#1a3a6b;--c2:#2d5499;--c3:#0f2444;--c4:#e8eef8;
+  --glow:rgba(45,84,153,0.3);
+}
+body{font-family:system-ui,sans-serif}
+.app{min-height:600px;background:#0a0f1e;color:#e8eef8}
+.nav{background:linear-gradient(90deg,var(--c3),var(--c1));padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--c2);position:sticky;top:0;z-index:50}
+.nav-logo{color:white;font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.nav-logo span{color:var(--c2-accent,#7aa3e8)}
+.nav-links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.nav-btn{background:transparent;color:#aac;border:1px solid rgba(255,255,255,0.15);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;transition:all 0.2s;font-family:inherit}
+.nav-btn:hover{background:rgba(255,255,255,0.1);color:white;border-color:rgba(255,255,255,0.3)}
+.nav-btn.active{background:var(--c1);color:white;border-color:var(--c2)}
+.lang-btn{background:transparent;color:#7aa3e8;border:1px solid #7aa3e8;padding:4px 8px;border-radius:4px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600}
+.lang-btn:hover{background:#7aa3e8;color:#0a0f1e}
+.page{display:none;padding:20px}
+.page.active{display:block}
+.hero{background:linear-gradient(135deg,#050c1a 0%,var(--c3) 50%,var(--c1) 100%);padding:40px 20px;text-align:center;margin:-20px -20px 24px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(45,84,153,0.05) 40px,rgba(45,84,153,0.05) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(45,84,153,0.05) 40px,rgba(45,84,153,0.05) 41px)}
+.hero h1{font-size:24px;font-weight:800;color:white;letter-spacing:2px;text-transform:uppercase;position:relative}
+.hero h1 span{color:#7aa3e8}
+.hero p{font-size:13px;color:#aac;margin-top:8px;position:relative}
+.hero-stats{display:flex;justify-content:center;gap:24px;margin-top:20px;position:relative}
+.hero-stat-num{font-size:24px;font-weight:800;color:#7aa3e8}
+.hero-stat-label{font-size:11px;color:#aac}
+.section-title{font-size:13px;font-weight:700;color:#7aa3e8;margin-bottom:14px;text-transform:uppercase;letter-spacing:2px;border-left:3px solid #7aa3e8;padding-left:10px}
+.clubs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:20px}
+.club-card{background:linear-gradient(135deg,#0d1929,#111f38);border:1px solid rgba(122,163,232,0.2);border-radius:12px;padding:16px;transition:all 0.2s;cursor:pointer}
+.club-card:hover{border-color:#7aa3e8;box-shadow:0 0 20px var(--glow);transform:translateY(-2px)}
+.club-emoji{width:42px;height:42px;background:rgba(122,163,232,0.1);border:1px solid rgba(122,163,232,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:20px}
+.club-name{font-size:14px;font-weight:700;color:white;margin-bottom:6px}
+.club-meta{font-size:12px;color:#7aa3e8;margin-bottom:2px}
+.badge{display:inline-block;font-size:10px;padding:3px 8px;border-radius:4px;margin-top:6px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.badge-open{background:rgba(0,255,128,0.1);color:#00ff80;border:1px solid rgba(0,255,128,0.3)}
+.badge-closed{background:rgba(255,60,60,0.1);color:#ff6060;border:1px solid rgba(255,60,60,0.3)}
+.btn{padding:8px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:none;font-family:inherit;font-weight:600;transition:all 0.2s}
+.btn-primary{background:var(--c1);color:white;border:1px solid var(--c2)}
+.btn-primary:hover{background:var(--c2);box-shadow:0 0 12px var(--glow)}
+.btn-outline{background:transparent;border:1px solid rgba(255,255,255,0.2);color:#aac}
+.btn-outline:hover{background:rgba(255,255,255,0.05)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;color:#7aa3e8;margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:1px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid rgba(122,163,232,0.3);border-radius:6px;font-size:13px;font-family:inherit;background:rgba(10,15,30,0.8);color:white}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#7aa3e8;box-shadow:0 0 8px rgba(122,163,232,0.2)}
+input::placeholder,textarea::placeholder{color:#556}
+select option{background:#0d1929;color:white}
+.card{background:linear-gradient(135deg,#0d1929,#111f38);border:1px solid rgba(122,163,232,0.2);border-radius:12px;padding:16px;margin-bottom:12px}
+.news-item{padding:12px 0;border-bottom:1px solid rgba(122,163,232,0.1)}
+.news-item:last-child{border-bottom:none}
+.news-date{font-size:11px;color:#556;margin-bottom:3px}
+.news-title{font-size:14px;font-weight:600;color:white;margin-bottom:3px}
+.news-desc{font-size:12px;color:#889;line-height:1.5}
+.news-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(122,163,232,0.1);color:#7aa3e8;margin-bottom:4px;font-weight:600;border:1px solid rgba(122,163,232,0.2);letter-spacing:1px;text-transform:uppercase}
+.tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid rgba(122,163,232,0.2)}
+.tab{padding:8px 16px;font-size:12px;cursor:pointer;border:none;background:none;color:#556;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.tab.active{color:#7aa3e8;border-bottom-color:#7aa3e8}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-card{background:linear-gradient(135deg,#0d1929,#111f38);border:1px solid rgba(122,163,232,0.2);border-radius:10px;padding:14px;text-align:center}
+.stat-num{font-size:28px;font-weight:800;color:#7aa3e8}
+.stat-label{font-size:10px;color:#556;margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{text-align:left;padding:8px 10px;font-size:11px;color:#7aa3e8;border-bottom:1px solid rgba(122,163,232,0.2);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.table td{padding:8px 10px;border-bottom:1px solid rgba(122,163,232,0.08);color:#ccd}
+.status-new{color:#7aa3e8;font-size:12px;font-weight:600}
+.status-ok{color:#00ff80;font-size:12px;font-weight:600}
+.status-no{color:#ff6060;font-size:12px;font-weight:600}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex}
+.modal{background:linear-gradient(135deg,#0d1929,#111f38);border:1px solid rgba(122,163,232,0.3);border-radius:14px;padding:24px;width:90%;max-width:420px;box-shadow:0 0 40px rgba(45,84,153,0.4)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:14px;color:white;text-transform:uppercase;letter-spacing:2px}
+.success-msg{display:none;padding:10px 12px;border-radius:6px;font-size:13px;margin-top:10px;font-weight:500}
+.alert-blue{background:rgba(122,163,232,0.1);border:1px solid rgba(122,163,232,0.3);border-radius:8px;padding:10px 14px;font-size:13px;color:#7aa3e8;margin-bottom:12px;font-weight:500}
+.user-badge{background:var(--c1);color:#7aa3e8;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;border:1px solid var(--c2);letter-spacing:1px}
+.db-badge{font-size:11px;padding:3px 8px;border-radius:4px;font-weight:600}
+.color-picker{display:flex;gap:8px;align-items:center;margin-bottom:0}
+.color-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;flex-shrink:0}
+.color-dot:hover,.color-dot.active{border-color:white;transform:scale(1.2)}
+.toolbar{background:rgba(5,12,26,0.9);padding:8px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(122,163,232,0.1);flex-wrap:wrap}
+.toolbar-label{font-size:11px;color:#556;text-transform:uppercase;letter-spacing:1px}
+</style>
+
+<div class="app">
+  <div class="nav">
+    <div class="nav-logo">🏫 Digital <span>Urpaq</span></div>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="showPage('home',this)" id="nb-home">–</button>
+      <button class="nav-btn" onclick="showPage('clubs',this)" id="nb-clubs">–</button>
+      <button class="nav-btn" id="loginNavBtn" onclick="showPage('register',this)">–</button>
+      <button class="nav-btn" onclick="showPage('admin',this)" id="adminBtn" style="display:none">⚙️</button>
+      <span class="user-badge" id="userBadge" style="display:none"></span>
+      <button class="lang-btn" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('kz')">ҚЗ</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <span class="toolbar-label" data-t="theme">Тема:</span>
+    <div class="color-dot active" style="background:#1a3a6b" onclick="setTheme('blue')" title="Синий"></div>
+    <div class="color-dot" style="background:#6b1a1a" onclick="setTheme('red')" title="Красный"></div>
+    <div class="color-dot" style="background:#1a6b2a" onclick="setTheme('green')" title="Зелёный"></div>
+    <div class="color-dot" style="background:#6b1a6b" onclick="setTheme('purple')" title="Фиолетовый"></div>
+    <div class="color-dot" style="background:#6b5a1a" onclick="setTheme('yellow')" title="Золотой"></div>
+  </div>
+
+  <div id="page-home" class="page active">
+    <div class="hero">
+      <h1>🏫 Digital <span>Urpaq</span></h1>
+      <p id="hero-sub">ул. Жамбыла Жабаева, 55А, Петропавловск · 09:00–21:00</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">100+</div><div class="hero-stat-label" data-t="circles">кружков</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">80%</div><div class="hero-stat-label" data-t="free">бесплатно</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label" data-t="floors">этажа</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <div class="section-title" style="margin:0" data-t="news">📰 НОВОСТИ</div>
+      <span class="db-badge" id="dbStatus">⏳</span>
+    </div>
+    <div class="card">
+      <div class="news-item"><span class="news-tag">🤖 RoboBalapan</span><div class="news-date">30 мая 2026</div><div class="news-title" data-t="n1t">Республиканский финал «RoboBalapan-2026» в Digital Urpaq</div><div class="news-desc" data-t="n1d">Дворец школьников стал площадкой финала конкурса детского технического творчества, объединившего шесть регионов Казахстана.</div></div>
+      <div class="news-item"><span class="news-tag">🌟 Лидерство</span><div class="news-date">Май 2026</div><div class="news-title" data-t="n2t">Урок лидерства «Ұлт мақтанышы»</div><div class="news-desc" data-t="n2d">Вдохновляющая встреча учащихся с успешными лидерами города Петропавловска.</div></div>
+      <div class="news-item"><span class="news-tag">🎓 Академия</span><div class="news-date">Июнь 2026</div><div class="news-title" data-t="n3t">Открыт набор в Летнюю академию 2026!</div><div class="news-desc" data-t="n3d">Принимаются заявки. Более 100 кружков по IT, биотехнологиям и творчеству.</div></div>
+    </div>
+    <div class="section-title" data-t="popular">⭐ ПОПУЛЯРНЫЕ КРУЖКИ</div>
+    <div id="homeClubs"><div style="color:#556;font-size:13px;padding:10px">⏳ Загрузка...</div></div>
+  </div>
+
+  <div id="page-clubs" class="page">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div class="section-title" style="margin:0" data-t="allclubs">ВСЕ КРУЖКИ</div>
+      <input type="text" id="searchInput" placeholder="🔍 Поиск..." style="width:150px" oninput="filterClubs(this.value)">
+    </div>
+    <div id="allClubs"><div style="color:#556;font-size:13px;padding:10px">⏳ Загрузка...</div></div>
+  </div>
+
+  <div id="page-register" class="page">
+    <div class="card" style="max-width:400px;margin:0 auto">
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')" data-t="login">ВОЙТИ</button>
+        <button class="tab" onclick="switchTab('signup')" data-t="signup">РЕГИСТРАЦИЯ</button>
+      </div>
+      <div id="tab-login" class="tab-content active">
+        <div class="form-group"><label class="form-label">Email</label><input type="email" id="loginEmail" placeholder="email@example.com"></div>
+        <div class="form-group"><label class="form-label" data-t="password">Пароль</label><input type="password" id="loginPass" placeholder="••••••"></div>
+        <button class="btn btn-primary" style="width:100%" onclick="doLogin()" data-t="loginBtn">Войти</button>
+        <div style="font-size:11px;color:#556;margin-top:8px">Demo: admin@urpaq.kz / admin123</div>
+        <div class="success-msg" id="loginMsg"></div>
+      </div>
+      <div id="tab-signup" class="tab-content">
+        <div class="form-group"><label class="form-label" data-t="fullname">ФИО</label><input type="text" id="regName" placeholder="Иванов Иван Иванович"></div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" id="regEmail" placeholder="email@example.com"></div>
+        <div class="form-group"><label class="form-label" data-t="phone">Телефон</label><input type="tel" id="regPhone" placeholder="+7 700 000 0000"></div>
+        <div class="form-group"><label class="form-label" data-t="age">Возраст</label><input type="number" id="regAge" placeholder="15" min="10" max="18"></div>
+        <div class="form-group"><label class="form-label" data-t="password">Пароль</label><input type="password" id="regPass" placeholder="••••••"></div>
+        <div class="form-group"><label class="form-label" data-t="role">Роль</label>
+          <select id="regRole">
+            <option value="student" data-t="student">Учащийся</option>
+            <option value="parent" data-t="parent">Родитель</option>
+            <option value="teacher" data-t="teacher">Преподаватель</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="width:100%" onclick="doRegister()" data-t="registerBtn">Зарегистрироваться</button>
+        <div class="success-msg" id="regMsg"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page-profile" class="page">
+    <div class="card" style="max-width:500px;margin:0 auto">
+      <div class="alert-blue" id="profileInfo"></div>
+      <div class="section-title" data-t="myapps">МОИ ЗАЯВКИ</div>
+      <div id="myApps"></div>
+      <div style="margin-top:14px"><button class="btn btn-outline btn-sm" onclick="doLogout()" data-t="logout">Выйти</button></div>
+    </div>
+  </div>
+
+  <div id="page-admin" class="page">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num" id="statClubs">–</div><div class="stat-label" data-t="allclubs">Кружков</div></div>
+      <div class="stat-card"><div class="stat-num" id="statApps">–</div><div class="stat-label" data-t="apps">Заявок</div></div>
+      <div class="stat-card"><div class="stat-num" id="statUsers">–</div><div class="stat-label" data-t="users">Польз.</div></div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchAdminTab('apps')" data-t="apps">ЗАЯВКИ</button>
+      <button class="tab" onclick="switchAdminTab('createClub')" data-t="addclub">+ КРУЖОК</button>
+    </div>
+    <div id="atab-apps" class="tab-content active">
+      <table class="table"><thead><tr><th data-t="fullname">ФИО</th><th data-t="circle">Кружок</th><th data-t="phone">Тел.</th><th data-t="status">Статус</th><th></th></tr></thead>
+        <tbody id="appsBody"><tr><td colspan="5" style="color:#556;font-size:13px;padding:16px 10px">–</td></tr></tbody>
+      </table>
+    </div>
+    <div id="atab-createClub" class="tab-content">
+      <div class="card" style="max-width:420px">
+        <div class="form-group"><label class="form-label" data-t="clubname">Название</label><input type="text" id="newClubName"></div>
+        <div class="form-group"><label class="form-label" data-t="desc">Описание</label><textarea id="newClubDesc" rows="2"></textarea></div>
+        <div class="form-group"><label class="form-label" data-t="direction">Направление</label>
+          <select id="newClubDir"><option>Технологии</option><option>Искусство</option><option>Спорт</option><option>Языки</option><option>Наука</option></select>
+        </div>
+        <div class="form-group"><label class="form-label" data-t="teacher">Преподаватель</label><input type="text" id="newClubTeacher"></div>
+        <div class="form-group"><label class="form-label" data-t="schedule">Расписание</label><input type="text" id="newClubSched" placeholder="Пн, Ср 15:00"></div>
+        <div class="form-group"><label class="form-label" data-t="room">Кабинет</label><input type="text" id="newClubRoom"></div>
+        <div class="form-group"><label class="form-label" data-t="slots">Мест</label><input type="number" id="newClubSlots" placeholder="20" min="1"></div>
+        <button class="btn btn-primary" onclick="addClub()" data-t="addclub">Добавить</button>
+        <div class="success-msg" id="clubMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="applyModal">
+  <div class="modal">
+    <div class="modal-title" data-t="apply">✏️ ЗАПИСЬ</div>
+    <div id="applyClubName" style="font-size:13px;color:#7aa3e8;margin-bottom:14px;font-weight:700"></div>
+    <div class="form-group"><label class="form-label" data-t="fullname">ФИО</label><input type="text" id="applyName"></div>
+    <div class="form-group"><label class="form-label" data-t="age">Возраст</label><input type="number" id="applyAge" min="5" max="18"></div>
+    <div class="form-group"><label class="form-label" data-t="phone">Телефон</label><input type="tel" id="applyPhone"></div>
+    <div class="form-group"><label class="form-label" data-t="comment">Комментарий</label><textarea id="applyComment" rows="2"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-primary" onclick="submitApply()" data-t="send">Отправить</button>
+      <button class="btn btn-outline" onclick="closeModal()" data-t="cancel">Отмена</button>
+    </div>
+    <div class="success-msg" id="applyMsg"></div>
+  </div>
+</div>
+
+<script>
+const BIN_ID='6a1d00caddf5aa59f77df6d3';
+const API_KEY='$2a$10$PvJ5.hVApg5OS.z7OBjodO4Gz1LD3wyG3Sls9LFmCNVJKcipAGdUK';
+const BASE='https://api.jsonbin.io/v3/b/'+BIN_ID;
+const EMOJIS=['🤖','🎨','♟️','🌍','🎭','🎵','🔬','⚽','💻','📐'];
+
+const THEMES={
+  blue:{c1:'#1a3a6b',c2:'#2d5499',c3:'#0f2444',accent:'#7aa3e8',glow:'rgba(45,84,153,0.3)'},
+  red:{c1:'#6b1a1a',c2:'#991f1f',c3:'#3d0a0a',accent:'#e87a7a',glow:'rgba(153,31,31,0.3)'},
+  green:{c1:'#1a5c2a',c2:'#1f8c3a',c3:'#0a3015',accent:'#7ae896',glow:'rgba(31,140,58,0.3)'},
+  purple:{c1:'#3d1a6b',c2:'#5c2d99',c3:'#1e0a44',accent:'#b07ae8',glow:'rgba(92,45,153,0.3)'},
+  yellow:{c1:'#5c4a0a',c2:'#8c6f0f',c3:'#2e2405',accent:'#e8d07a',glow:'rgba(140,111,15,0.3)'}
+};
+
+const T={
+  ru:{home:'Главная',clubs:'Кружки',login:'Войти',signup:'Регистрация',loginBtn:'Войти',registerBtn:'Зарегистрироваться',password:'Пароль',fullname:'ФИО',phone:'Телефон',age:'Возраст',role:'Роль',student:'Учащийся',parent:'Родитель',teacher:'Преподаватель',news:'📰 НОВОСТИ',popular:'⭐ ПОПУЛЯРНЫЕ КРУЖКИ',allclubs:'ВСЕ КРУЖКИ',myapps:'МОИ ЗАЯВКИ',logout:'Выйти',apps:'ЗАЯВКИ',users:'Польз.',addclub:'+ КРУЖОК',clubname:'Название',desc:'Описание',direction:'Направление',schedule:'Расписание',room:'Кабинет',slots:'Мест',apply:'✏️ ЗАПИСЬ',send:'Отправить',cancel:'Отмена',comment:'Комментарий',circle:'Кружок',status:'Статус',theme:'Тема:',circles:'кружков',free:'бесплатно',floors:'этажа',n1t:'Республиканский финал «RoboBalapan-2026»',n1d:'Дворец школьников стал площадкой финала конкурса, объединившего шесть регионов Казахстана.',n2t:'Урок лидерства «Ұлт мақтанышы»',n2d:'Встреча учащихся с успешными лидерами города Петропавловска.',n3t:'Открыт набор в Летнюю академию 2026!',n3d:'Более 100 кружков по IT, биотехнологиям и творчеству.',profile:'Профиль'},
+  kz:{home:'Басты бет',clubs:'Үйірмелер',login:'Кіру',signup:'Тіркелу',loginBtn:'Кіру',registerBtn:'Тіркелу',password:'Құпия сөз',fullname:'Аты-жөні',phone:'Телефон',age:'Жасы',role:'Рөл',student:'Оқушы',parent:'Ата-ана',teacher:'Мұғалім',news:'📰 ЖАҢАЛЫҚТАР',popular:'⭐ ТАНЫМАЛ ҮЙІРМЕЛЕР',allclubs:'БАРЛЫҚ ҮЙІРМЕЛЕР',myapps:'МЕНІҢ ӨТІНІМДЕРІМ',logout:'Шығу',apps:'ӨТІНІМДЕР',users:'Қолд.',addclub:'+ ҮЙІРМЕ',clubname:'Атауы',desc:'Сипаттама',direction:'Бағыт',schedule:'Кесте',room:'Кабинет',slots:'Орын',apply:'✏️ ЖАЗЫЛУ',send:'Жіберу',cancel:'Болдырмау',comment:'Пікір',circle:'Үйірме',status:'Мәртебе',theme:'Тақырып:',circles:'үйірме',free:'тегін',floors:'қабат',n1t:'«RoboBalapan-2026» республикалық финалы',n1d:'Дворец школьников алты өңірдің жарысы финалына алаң болды.',n2t:'«Ұлт мақтанышы» көшбасшылық сабағы',n2d:'Оқушылардың қала көшбасшыларымен кездесуі.',n3t:'2026 Жазғы академияға қабылдау ашылды!',n3d:'100-ден астам IT, биотехнология және шығармашылық үйірмелері.',profile:'Профиль'},
+  en:{home:'Home',clubs:'Clubs',login:'Sign In',signup:'Register',loginBtn:'Sign In',registerBtn:'Register',password:'Password',fullname:'Full Name',phone:'Phone',age:'Age',role:'Role',student:'Student',parent:'Parent',teacher:'Teacher',news:'📰 NEWS',popular:'⭐ POPULAR CLUBS',allclubs:'ALL CLUBS',myapps:'MY APPLICATIONS',logout:'Sign Out',apps:'APPLICATIONS',users:'Users',addclub:'+ CLUB',clubname:'Name',desc:'Description',direction:'Direction',schedule:'Schedule',room:'Room',slots:'Slots',apply:'✏️ APPLY',send:'Send',cancel:'Cancel',comment:'Comment',circle:'Club',status:'Status',theme:'Theme:',circles:'clubs',free:'free',floors:'floors',n1t:'Republican Final «RoboBalapan-2026»',n1d:'Digital Urpaq hosted the final of the children\'s technical creativity contest from six regions of Kazakhstan.',n2t:'Leadership Lesson «Ұлт мақтанышы»',n2d:'Inspiring meeting of students with successful leaders of Petropavlovsk.',n3t:'Summer Academy 2026 enrollment is open!',n3d:'Over 100 clubs in IT, biotechnology and creative arts.',profile:'Profile'}
+};
+
+let lang='ru', db=null, currentClub=null;
+let currentUser=JSON.parse(sessionStorage.getItem('du_user')||'null');
+
+function t(key){return T[lang][key]||key;}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const key=el.getAttribute('data-t');
+    if(el.tagName==='INPUT'&&el.type==='text')el.placeholder=t(key)||el.placeholder;
+    else el.textContent=t(key);
+  });
+  document.getElementById('nb-home').textContent=t('home');
+  document.getElementById('nb-clubs').textContent=t('clubs');
+  const lb=document.getElementById('loginNavBtn');
+  lb.textContent=currentUser?t('profile'):t('login');
+  document.getElementById('searchInput').placeholder='🔍 '+(l==='ru'?'Поиск...':l==='kz'?'Іздеу...':'Search...');
+  if(db){renderClubs(db.clubs.slice(0,3),'homeClubs');renderClubs(db.clubs,'allClubs');}
+}
+
+function setTheme(name){
+  const th=THEMES[name];
+  document.documentElement.style.setProperty('--c1',th.c1);
+  document.documentElement.style.setProperty('--c2',th.c2);
+  document.documentElement.style.setProperty('--c3',th.c3);
+  document.documentElement.style.setProperty('--glow',th.glow);
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.nav-btn.active').forEach(b=>{b.style.background=th.c1;});
+  document.querySelectorAll('.section-title,.form-label,.club-meta,.stat-num,.tab.active,.news-tag,.user-badge,.db-badge').forEach(el=>{
+    if(el.classList.contains('section-title')||el.classList.contains('tab')){el.style.color=th.accent;el.style.borderColor=th.accent;}
+    else if(el.classList.contains('stat-num')){el.style.color=th.accent;}
+  });
+  document.querySelectorAll('.btn-primary').forEach(b=>{b.style.background=th.c1;b.style.borderColor=th.c2;});
+}
+
+async function loadDB(){
+  try{
+    const r=await fetch(BASE+'/latest',{headers:{'X-Master-Key':API_KEY}});
+    const data=await r.json();db=data.record;
+    const el=document.getElementById('dbStatus');
+    el.textContent='🟢 DB Online';el.style.background='rgba(0,255,128,0.1)';el.style.color='#00ff80';el.style.border='1px solid rgba(0,255,128,0.3)';
+    return db;
+  }catch(e){
+    const el=document.getElementById('dbStatus');
+    el.textContent='🔴 DB Offline';el.style.background='rgba(255,60,60,0.1)';el.style.color='#ff6060';
+    return null;
+  }
+}
+
+async function saveDB(){
+  await fetch(BASE,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(db)});
+}
+
+function renderClubs(list,id){
+  const el=document.getElementById(id);
+  if(!list||!list.length){el.innerHTML='<p style="color:#556;font-size:13px">–</p>';return;}
+  el.innerHTML='<div class="clubs-grid">'+list.map(c=>`
+    <div class="club-card">
+      <div class="club-emoji">${c.emoji||'⭐'}</div>
+      <div class="club-name">${c.name}</div>
+      <div class="club-meta">📅 ${c.sched||'—'}</div>
+      <div class="club-meta">🚪 ${c.room||'—'}</div>
+      <div class="club-meta">👥 ${c.slots||'—'}</div>
+      <span class="badge ${c.open?'badge-open':'badge-closed'}">${c.open?(lang==='kz'?'Ашық':lang==='en'?'OPEN':'ОТКРЫТ'):(lang==='kz'?'Жабық':lang==='en'?'CLOSED':'ЗАКРЫТ')}</span><br>
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;width:100%" ${!c.open?'disabled':''} onclick="openApply(${c.id})">${lang==='kz'?'Жазылу':lang==='en'?'Apply':'Записаться'}</button>
+    </div>`).join('')+'</div>';
+}
+
+function showPage(p,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(p==='clubs'&&db)renderClubs(db.clubs,'allClubs');
+  if(p==='home'&&db)renderClubs(db.clubs.slice(0,3),'homeClubs');
+  if(p==='admin'){loadDB().then(()=>updateAdminStats());}
+  if(p==='profile')updateProfile();
+}
+
+function filterClubs(q){if(db)renderClubs(db.clubs.filter(c=>c.name.toLowerCase().includes(q.toLowerCase())),'allClubs');}
+
+function switchTab(t2){
+  document.querySelectorAll('#page-register .tab').forEach((x,i)=>x.classList.toggle('active',(i===0&&t2==='login')||(i===1&&t2==='signup')));
+  document.getElementById('tab-login').classList.toggle('active',t2==='login');
+  document.getElementById('tab-signup').classList.toggle('active',t2==='signup');
+}
+
+function switchAdminTab(t2){
+  document.querySelectorAll('#page-admin .tab').forEach((x,i)=>x.classList.toggle('active',(i===0&&t2==='apps')||(i===1&&t2==='createClub')));
+  document.getElementById('atab-apps').classList.toggle('active',t2==='apps');
+  document.getElementById('atab-createClub').classList.toggle('active',t2==='createClub');
+  if(t2==='apps')renderAppsTable();
+}
+
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value,pass=document.getElementById('loginPass').value;
+  if(!db)await loadDB();
+  const user=db.users.find(u=>u.email===email&&u.password===pass);
+  if(!user){showMsg('loginMsg','❌ '+(lang==='kz'?'Қате email немесе құпия сөз':lang==='en'?'Wrong email or password':'Неверный email или пароль'),false);return;}
+  currentUser=user;sessionStorage.setItem('du_user',JSON.stringify(user));
+  updateUserUI();showMsg('loginMsg','✅ '+user.name,true);
+  setTimeout(()=>showPage(user.role==='admin'?'admin':'profile'),800);
+}
+
+async function doRegister(){
+  const name=document.getElementById('regName').value,email=document.getElementById('regEmail').value;
+  const phone=document.getElementById('regPhone').value,age=document.getElementById('regAge').value;
+  const pass=document.getElementById('regPass').value,role=document.getElementById('regRole').value;
+  if(!name||!email||!pass){showMsg('regMsg','❌ '+(lang==='kz'?'Барлық өрісті толтырыңыз':lang==='en'?'Fill all fields':'Заполните все поля'),false);return;}
+  if(!db)await loadDB();
+  if(db.users.find(u=>u.email===email)){showMsg('regMsg','❌ '+(lang==='en'?'Email already registered':'Email уже зарегистрирован'),false);return;}
+  const u={name,email,phone,age,password:pass,role};
+  db.users.push(u);await saveDB();
+  currentUser=u;sessionStorage.setItem('du_user',JSON.stringify(u));
+  updateUserUI();
+  showMsg('regMsg','✅ '+(lang==='kz'?'Сәтті тіркелдіңіз!':lang==='en'?'Registered successfully!':'Регистрация успешна!'),true);
+  setTimeout(()=>showPage('profile'),1000);
+}
+
+function doLogout(){
+  currentUser=null;sessionStorage.removeItem('du_user');
+  document.getElementById('userBadge').style.display='none';
+  document.getElementById('adminBtn').style.display='none';
+  const b=document.getElementById('loginNavBtn');b.textContent=t('login');b.onclick=function(){showPage('register',this);};
+  showPage('home');
+}
+
+function updateUserUI(){
+  if(!currentUser)return;
+  document.getElementById('userBadge').style.display='inline-block';
+  document.getElementById('userBadge').textContent=currentUser.name.split(' ')[0];
+  if(currentUser.role==='admin')document.getElementById('adminBtn').style.display='inline-block';
+  const b=document.getElementById('loginNavBtn');b.textContent=t('profile');b.onclick=function(){showPage('profile',this);};
+}
+
+function updateProfile(){
+  if(!currentUser)return;
+  const roles={student:t('student'),parent:t('parent'),teacher:t('teacher'),admin:'Admin'};
+  document.getElementById('profileInfo').innerHTML='👤 <b>'+currentUser.name+'</b> · '+(roles[currentUser.role]||currentUser.role)+' · '+currentUser.email;
+  if(!db){loadDB().then(renderMyApps);return;}
+  renderMyApps();
+}
+
+function renderMyApps(){
+  const myA=(db.applications||[]).filter(a=>a.email===currentUser.email);
+  const el=document.getElementById('myApps');
+  if(!myA.length){el.innerHTML='<p style="font-size:13px;color:#556">–</p>';return;}
+  el.innerHTML=myA.map(a=>`<div style="padding:8px 0;border-bottom:1px solid rgba(122,163,232,0.1);font-size:13px;color:#ccd"><b style="color:white">${a.club}</b> — <span class="status-${a.status==='новая'||a.status==='new'?'new':a.status==='одобрена'||a.status==='approved'?'ok':'no'}">${a.status}</span></div>`).join('');
+}
+
+function openApply(id){
+  currentClub=db.clubs.find(c=>c.id===id);
+  document.getElementById('applyClubName').textContent=currentClub.emoji+' '+currentClub.name;
+  if(currentUser)document.getElementById('applyName').value=currentUser.name;
+  document.getElementById('applyModal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('applyModal').classList.remove('open');document.getElementById('applyMsg').style.display='none';}
+
+async function submitApply(){
+  const name=document.getElementById('applyName').value,phone=document.getElementById('applyPhone').value;
+  if(!name||!phone){showMsg('applyMsg','❌ '+(lang==='en'?'Fill name and phone':'Заполните ФИО и телефон'),false);return;}
+  showMsg('applyMsg','⏳ Saving...',true);
+  const app={id:Date.now(),name,age:document.getElementById('applyAge').value,phone,club:currentClub.name,clubId:currentClub.id,comment:document.getElementById('applyComment').value,status:'новая',email:currentUser?currentUser.email:''};
+  if(!db.applications)db.applications=[];
+  db.applications.push(app);await saveDB();
+  showMsg('applyMsg','✅ '+(lang==='kz'?'Өтінім жіберілді!':lang==='en'?'Application saved!':'Заявка сохранена на сервере!'),true);
+  setTimeout(closeModal,1500);
+}
+
+async function addClub(){
+  const name=document.getElementById('newClubName').value;
+  if(!name){showMsg('clubMsg','❌',false);return;}
+  showMsg('clubMsg','⏳ Saving...',true);
+  db.clubs.push({id:Date.now(),name,desc:document.getElementById('newClubDesc').value,dir:document.getElementById('newClubDir').value,teacher:document.getElementById('newClubTeacher').value,sched:document.getElementById('newClubSched').value,room:document.getElementById('newClubRoom').value,slots:parseInt(document.getElementById('newClubSlots').value)||20,open:true,emoji:EMOJIS[Math.floor(Math.random()*EMOJIS.length)]});
+  await saveDB();updateAdminStats();
+  showMsg('clubMsg','✅ '+(lang==='en'?'Club added!':'Кружок добавлен!'),true);
+  ['newClubName','newClubDesc','newClubTeacher','newClubSched','newClubRoom','newClubSlots'].forEach(id=>document.getElementById(id).value='');
+}
+
+function renderAppsTable(){
+  const apps=db?(db.applications||[]):[];
+  const tbody=document.getElementById('appsBody');
+  if(!apps.length){tbody.innerHTML='<tr><td colspan="5" style="color:#556;font-size:13px;padding:16px 10px">–</td></tr>';return;}
+  tbody.innerHTML=apps.map(a=>`<tr><td>${a.name}</td><td>${a.club}</td><td>${a.phone}</td><td><span class="status-${a.status==='новая'?'new':a.status==='одобрена'?'ok':'no'}">${a.status}</span></td><td><select style="font-size:11px;padding:3px;border-radius:4px;background:#0d1929;color:#ccd;border:1px solid rgba(122,163,232,0.3)" onchange="changeStatus(${a.id},this.value)"><option ${a.status==='новая'?'selected':''}>новая</option><option ${a.status==='одобрена'?'selected':''}>одобрена</option><option ${a.status==='отклонена'?'selected':''}>отклонена</option><option ${a.status==='в ожидании'?'selected':''}>в ожидании</option></select></td></tr>`).join('');
+}
+
+async function changeStatus(id,status){const a=db.applications.find(x=>x.id===id);if(a){a.status=status;await saveDB();renderAppsTable();}}
+function updateAdminStats(){document.getElementById('statClubs').textContent=db?db.clubs.length:0;document.getElementById('statApps').textContent=db?(db.applications||[]).length:0;document.getElementById('statUsers').textContent=db?db.users.length:0;renderAppsTable();}
+function showMsg(id,text,ok){const el=document.getElementById(id);el.textContent=text;el.style.display='block';el.style.background=ok?'rgba(0,255,128,0.1)':'rgba(255,60,60,0.1)';el.style.color=ok?'#00ff80':'#ff6060';el.style.border=ok?'1px solid rgba(0,255,128,0.2)':'1px solid rgba(255,60,60,0.2)';}
+
+setLang('ru');
+loadDB().then(()=>{
+  if(db){renderClubs(db.clubs.slice(0,3),'homeClubs');if(currentUser)updateUserUI();}
+});
+</script>
